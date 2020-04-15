@@ -5,9 +5,9 @@
 class TimerImpl
 {
 protected:
-    TimerImpl() : m_thread_id(0), m_head(0) {}
+    TimerImpl();
 public:
-    ~TimerImpl() {}
+    ~TimerImpl();
 
     enum t_timer
     {
@@ -24,7 +24,8 @@ public:
     void stop_timer(size_t timer_id);
     void finalize();
 
-    int GetEventFD();
+    int GetWaitableObject();
+    void Signal(unsigned int nTimerId);
 
 private:
     struct timer_node
@@ -42,6 +43,8 @@ private:
     timer_node* get_timer_from_fd(int fd);
     static void* timer_thread(void * data);
     void* MainLoop();
+
+    int m_eventFd;
 
     pthread_t m_thread_id;
     timer_node* m_head;

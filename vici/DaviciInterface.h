@@ -26,10 +26,9 @@ public:
     ~DaviciInterface();
 
     void Connect(ConnectionTracker& connTracker);
-    void ReadData();
 
-    void WaitForEvent();
-    int Receive();
+    void ReadData();
+    void WriteData();
 
     void FetchSecurityAssociations();
 
@@ -37,8 +36,6 @@ public:
     void SetNetworkEventHandler(INetworkEventHandler* pNetworkEventHandler);
 
 private:
-    int build_fd_sets(int fd, fd_set *read_fds, fd_set *write_fds, fd_set *except_fds);
-
     static int vici_fdcallback(struct davici_conn *conn, int fd, int ops, void *user);
     static void eventlog(struct davici_conn *c, int err, const char *name,
 				    	struct davici_response *res, void *user);
@@ -50,6 +47,7 @@ private:
     static void eventlistsa(struct davici_conn *c, int err, const char *name,
                             struct davici_response *res, void *user);
 
+    void onEventlog(struct davici_conn *c, int err, struct davici_response *res);
     void onNetworkActivity();
 
     class Message
@@ -144,6 +142,5 @@ private:
     Peer m_peer;
     int m_fd;
 	davici_conn* m_conn;
-    bool m_bConnectionReady;
     unsigned int m_nTimerId;
 };

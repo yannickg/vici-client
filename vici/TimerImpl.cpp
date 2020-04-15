@@ -6,12 +6,24 @@
 #include <sys/timerfd.h>
 #include <pthread.h>
 #include <poll.h>
-
+#include <sys/eventfd.h>
+#include <iostream>
 
 #define MAX_TIMER_COUNT 1000
 
 TimerImpl* TimerImpl::m_pSelf = NULL;
 
+TimerImpl::TimerImpl() :
+    m_thread_id(0), m_head(0)
+{
+    m_eventFd = eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
+    std::cout << "TimerImpl::TimerImpl() - m_eventFd: " << m_eventFd << std::endl;
+}
+
+TimerImpl::~TimerImpl()
+{
+    close(m_eventFd);
+}
 
 TimerImpl* TimerImpl::Instance()
 {
@@ -212,8 +224,15 @@ void* TimerImpl::MainLoop()
     return NULL;
 }
 
-int TimerImpl::GetEventFD()
+int TimerImpl::GetWaitableObject()
 {
-
+    return m_eventFd;
 }
 
+void TimerImpl::Signal(unsigned int nTimerId)
+{
+    std::cout << "TimerImpl::Signal()" << std::endl;
+
+    uint64_t val = nTimerId;
+    int ret = write(m_eventFd, &val, sizeof(uint64_t));
+}

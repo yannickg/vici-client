@@ -11,6 +11,7 @@
 #include "NetworkEventHandler.h"
 #include "VirtualIPsFetcher.h"
 #include "MessageExchange.h"
+#include "Timer.h"
 
 static void
 signalHandler(int signo)
@@ -41,12 +42,15 @@ int main(int argc, char* argv[])
 
     try
     {
+        TimerMgr timerMgr;
         DaviciInterface davici;
         MessageExchange exchange;
         VirtualIPsFetcher vipsFetcher;
         NetworkEventHandler networkEventHandler;        
 
-        exchange.SetDaviciInterface(&davici);
+        // TODO: watch for object lifetime
+        exchange.SetTimerWaitableObject(timerMgr);
+        exchange.SetDaviciInterface(davici);
         vipsFetcher.SetDaviciInterface(&davici);
         davici.SetNetworkEventHandler(&networkEventHandler);
         networkEventHandler.SetVirtualIPsFetcher(&vipsFetcher);
