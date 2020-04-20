@@ -29,6 +29,8 @@ unsigned int Timer::StartTimer(unsigned int interval, boost::function<void()> ca
 
 unsigned int Timer::CancelTimer(unsigned int nTimerId)
 {
+    std::cout << "Timer::CancelTimer()" << std::endl;
+
     TimerImpl::Instance()->stop_timer(nTimerId);
     m_mapCallbacks.erase(nTimerId);
     return 0;

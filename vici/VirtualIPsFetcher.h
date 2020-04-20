@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SecurityAssociationList.h"
+
 class DaviciInterface;
 
 class VirtualIPsFetcher
@@ -10,7 +12,9 @@ public:
 
     void SetDaviciInterface(DaviciInterface* pDaviciInterface);
     void FetchSecurityAssociations();
+    void ParseSecurityAssociationList();
 
 private:
     DaviciInterface* m_pDaviciInterface;
+    SecurityAssociationList m_saList;
 };

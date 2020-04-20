@@ -17,3 +17,13 @@ void NetworkEventHandler::onNetworkActivity()
         m_pVirtualIPsFetcher->FetchSecurityAssociations();
     }
 }
+
+void NetworkEventHandler::onFetchVIPsComplete()
+{
+    std::cout << "NetworkEventHandler::onFetchVIPsComplete()" << std::endl;
+
+    if (m_pVirtualIPsFetcher)
+    {
+        m_pVirtualIPsFetcher->ParseSecurityAssociationList();
+    }
+}

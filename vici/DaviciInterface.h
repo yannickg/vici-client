@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SecurityAssociationList.h"
+
 #include <stdio.h>
 #include <memory.h>
 
@@ -30,7 +32,7 @@ public:
     void ReadData();
     void WriteData();
 
-    void FetchSecurityAssociations();
+    void FetchSecurityAssociations(SecurityAssociationList& saList);
 
     bool ConnectionIsReady() const;
     void SetNetworkEventHandler(INetworkEventHandler* pNetworkEventHandler);
@@ -41,6 +43,7 @@ private:
 				    	struct davici_response *res, void *user);
     static void eventlistsas(struct davici_conn *c, int err, const char *name,
                             struct davici_response *res, void *user);
+                            
     static int section(struct davici_response *res, void *user);
     static int list(struct davici_response *res, void *user);
     static int keyvalue(struct davici_response *res, void *user);
@@ -138,6 +141,7 @@ private:
 
     INetworkEventHandler* m_pNetworkEventHandler;
     ConnectionTracker* m_pConnTracker;
+    SecurityAssociationList* m_pSAList;
 
     Peer m_peer;
     int m_fd;

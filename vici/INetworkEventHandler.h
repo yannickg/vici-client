@@ -20,4 +20,5 @@ public:
     }
 
     virtual void onNetworkActivity() = 0;
+    virtual void onFetchVIPsComplete() = 0;
 };

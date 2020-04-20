@@ -14,6 +14,7 @@ public:
     void SetVirtualIPsFetcher(VirtualIPsFetcher* pVirtualIPsFetcher);
 
     virtual void onNetworkActivity();
+    virtual void onFetchVIPsComplete();
 
 private:
     VirtualIPsFetcher* m_pVirtualIPsFetcher;
