@@ -73,9 +73,7 @@ void MessageExchange::WaitForEvent()
                     {
                         if (m_connTracker.m_pfd[i].revents & POLLIN)
                         {
-                std::cout << "yahoo!" << std::endl;
-                            TimerMgr tmrMgr;
-                            tmrMgr.ReadData();
+                            TimerMgr::ReadData();
                         }
                         else if (m_connTracker.m_pfd[i].revents & POLLOUT)
                         {

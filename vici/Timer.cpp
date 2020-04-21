@@ -5,6 +5,7 @@
 
 
 std::map<unsigned int, TimerCallback> Timer::m_mapCallbacks;
+int TimerMgr::m_fd = -1;
 
 
 Timer::Timer()
@@ -50,7 +51,7 @@ void Timer::Callback(unsigned int nTimerId)
     Timer::m_mapCallbacks[nTimerId].m_callback();
 }
 
-TimerMgr::TimerMgr() : m_fd(-1)
+TimerMgr::TimerMgr()
 {
     TimerImpl::Instance();
 }

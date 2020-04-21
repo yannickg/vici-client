@@ -32,9 +32,9 @@ public:
     TimerMgr();
     ~TimerMgr();
 
-    int ReadData();
-    int GetWaitableObject();
+    static int ReadData();
+    static int GetWaitableObject();
 
 private:
-    int m_fd;
+    static int m_fd;
 };

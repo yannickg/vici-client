@@ -16,5 +16,6 @@ public:
 
 private:
     DaviciInterface* m_pDaviciInterface;
-    SecurityAssociationList m_saList;
+    SecurityAssociationList m_saNewList;
+    SecurityAssociationList m_saCompleteList;
 };

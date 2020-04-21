@@ -108,14 +108,7 @@ void DaviciInterface::eventlistsas(struct davici_conn *c, int err, const char *n
     DaviciInterface* pSelf = static_cast<DaviciInterface*>(user);
     if (pSelf && pSelf->m_pNetworkEventHandler)
     {
-        pSelf->m_pNetworkEventHandler->onFetchVIPsComplete();
-    }
-
-    assert(err >= 0);
-    if (res)
-    {
-        int element = davici_parse(res);
-        std::cout << "element: " << element << std::endl;
+        pSelf->m_pNetworkEventHandler->onFetchVIPsTaskComplete();
     }
 }
 
@@ -126,13 +119,6 @@ int DaviciInterface::section(struct davici_response *res, void *user)
 
     std::cout << "***Level: " << davici_get_level(res) << std::endl;
 
-    const char* name = davici_get_name(res);
-    std::cout << "name: " << name << std::endl;
-
-    char value[32];
-    int ret1 = davici_get_value_str(res, value, sizeof(value));
-    std::cout << "value: " << value << std::endl;
-
     int recurse, parse;
     do 
     {
@@ -140,7 +126,7 @@ int DaviciInterface::section(struct davici_response *res, void *user)
         do 
         {
             recurse = davici_recurse(res, section, list, keyvalue, user);
-            std::cout << "[section] - **************recurse return value: " << recurse << std::endl;
+            std::cout << "[section] - recurse's return value: " << recurse << std::endl;
         }
         while (recurse > 0);
 
@@ -150,7 +136,7 @@ int DaviciInterface::section(struct davici_response *res, void *user)
             std::cout << "[section] - found a list inside section, invoking list() now" << std::endl;
             parse = list(res, user);
         }
-        std::cout << "[section] - **************parse return value: " << parse << std::endl;
+        std::cout << "[section] - parse's return value: " << parse << std::endl;
     }
     while (parse != 0 && recurse != 0);
 
@@ -167,7 +153,6 @@ int DaviciInterface::list(struct davici_response *res, void *user)
     {
         int element = -1;// = davici_parse(res);
 
-        std::cout << "##################################################" << std::endl;
         do
         {
             std::cout << "***Level: " << davici_get_level(res) << std::endl;
@@ -176,19 +161,9 @@ int DaviciInterface::list(struct davici_response *res, void *user)
                 char value[32];
                 davici_get_value_str(res, value, sizeof(value));
                 pSAItem->m_remoteVips.push_back(value);
-                std::cout << "*****************remote-vips: " << value << std::endl;
             }
-
-            if (element != -1)
-            {
-                std::cout << "element: " << element << std::endl;
-            }
-
         }
         while ((element = davici_parse(res)) != DAVICI_LIST_END);
-
-        std::cout << "element: " << element << std::endl;
-        std::cout << "##################################################" << std::endl;
     }
 
     return 0;
@@ -198,7 +173,6 @@ int DaviciInterface::list(struct davici_response *res, void *user)
 int DaviciInterface::keyvalue(struct davici_response *res, void *user)
 {
     std::cout << "DaviciInterface::keyvalue()" << std::endl;
-
 
     SecurityAssociationItem* pSAItem = static_cast<SecurityAssociationItem*>(user);
     if (pSAItem)
@@ -210,28 +184,24 @@ int DaviciInterface::keyvalue(struct davici_response *res, void *user)
             char value[32];
             davici_get_value_str(res, value, sizeof(value));
             pSAItem->m_localHost = value;
-            std::cout << "*****************local-host: " << value << std::endl;
         }
         else if (davici_name_strcmp(res, "local-id") == 0)
         {
             char value[32];
             davici_get_value_str(res, value, sizeof(value));
             pSAItem->m_localId = value;
-            std::cout << "*****************local-id: " << value << std::endl;
         }
         else if (davici_name_strcmp(res, "remote-host") == 0)
         {
             char value[32];
             davici_get_value_str(res, value, sizeof(value));
             pSAItem->m_remoteHost = value;
-            std::cout << "*****************remote-host: " << value << std::endl;
         }
         else if (davici_name_strcmp(res, "remote-id") == 0)
         {
             char value[32];
             davici_get_value_str(res, value, sizeof(value));
             pSAItem->m_remoteId = value;
-            std::cout << "*****************remote-id: " << value << std::endl;
         }
     }
 
@@ -259,7 +229,7 @@ void DaviciInterface::eventlistsa(struct davici_conn *c, int err, const char *na
                 do 
                 {
                     recurse = davici_recurse(res, section, list, keyvalue, &saItem);
-                    std::cout << "**************recurse's return value: " << recurse << std::endl;
+                    std::cout << "recurse's return value: " << recurse << std::endl;
                 }
                 while (recurse > 0);
 
@@ -269,7 +239,7 @@ void DaviciInterface::eventlistsa(struct davici_conn *c, int err, const char *na
                     std::cout << "found a list inside key/value pair, invoking list() now" << std::endl;
                     parse = list(res, &saItem);
                 }
-                std::cout << "**************parse's return value: " << parse << std::endl;
+                std::cout << "  parse's return value: " << parse << std::endl;
             }
             while (parse != 0 && recurse != 0);
 

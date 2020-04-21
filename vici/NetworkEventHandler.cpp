@@ -18,9 +18,9 @@ void NetworkEventHandler::onNetworkActivity()
     }
 }
 
-void NetworkEventHandler::onFetchVIPsComplete()
+void NetworkEventHandler::onFetchVIPsTaskComplete()
 {
-    std::cout << "NetworkEventHandler::onFetchVIPsComplete()" << std::endl;
+    std::cout << "NetworkEventHandler::onFetchVIPsTaskComplete()" << std::endl;
 
     if (m_pVirtualIPsFetcher)
     {
